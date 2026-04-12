@@ -18,7 +18,7 @@ class ExchangeBackend(models.Model):
         return self.name
 
     def clear_rates(self):
-        self.rates.all().delete()
+        pass
 
 
 class Rate(models.Model):
@@ -32,7 +32,7 @@ class Rate(models.Model):
 
 
 def get_default_backend_name():
-    return import_string(EXCHANGE_BACKEND).name
+    pass
 
 
 def get_rate(source, target, backend=None):
@@ -41,41 +41,18 @@ def get_rate(source, target, backend=None):
     Converts exchange rate on the DB side if there is no backends with given base currency.
     Uses data from the default backend if the backend is not specified.
     """
-    if str(source) == str(target):
-        return 1
-    if backend is None:
-        backend = get_default_backend_name()
-    key = f"djmoney:get_rate:{source}:{target}:{backend}"
-    result = cache.get(key)
-    if result is not None:
-        return result
-    result = _get_rate(source, target, backend)
-    cache.set(key, result, RATES_CACHE_TIMEOUT)
-    return result
+    pass
 
 
 def _get_rate(source, target, backend):
-    source, target = str(source), str(target)
-    rates = Rate.objects.filter(currency__in=(source, target), backend=backend).select_related("backend")
-    if not rates:
-        raise MissingRate(f"Rate {source} -> {target} does not exist")
-    if len(rates) == 1:
-        return _try_to_get_rate_directly(source, target, rates[0])
-    return _get_rate_via_base(rates, target)
+    pass
 
 
 def _try_to_get_rate_directly(source, target, rate):
     """
     Either target or source equals to base currency of existing rate.
     """
-    # Converting from base currency to target
-    if rate.backend.base_currency == source and rate.currency == target:
-        return rate.value
-    # Converting from target currency to base
-    elif rate.backend.base_currency == target and rate.currency == source:
-        return 1 / rate.value
-    # Case when target or source is not a base currency
-    raise MissingRate(f"Rate {source} -> {target} does not exist")
+    pass
 
 
 def _get_rate_via_base(rates, target):
@@ -92,19 +69,8 @@ def _get_rate_via_base(rates, target):
 
     1 NOK = 8.37 / 7.84 SEK
     """
-    first, second = rates
-    # Instead of expecting an explicit order in the `rates` iterable, that will put the
-    # source currency in the first place, we decided to add an extra check here and swap
-    # items if they are ordered not as expected
-    if first.currency == target:
-        first, second = second, first
-    return second.value / first.value
+    pass
 
 
 def convert_money(value, currency, backend=None):
-    if "djmoney.contrib.exchange" not in settings.INSTALLED_APPS:
-        raise ImproperlyConfigured(
-            "You have to add 'djmoney.contrib.exchange' to INSTALLED_APPS in order to use currency exchange"
-        )
-    amount = value.amount * get_rate(value.currency, currency, backend=backend)
-    return value.__class__(amount, currency)
+    pass

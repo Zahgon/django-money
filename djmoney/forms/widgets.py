@@ -12,17 +12,7 @@ __all__ = (
 class HiddenMoneyWidget(HiddenInput):
 
     def format_value(self, value):
-        if value is None:
-            return ""
-        # For hidden inputs, we are sometimes supplied with a pre-formatted value
-        if isinstance(value, str):
-            return value
-        # The hidden input widget is used in a MultiField (MoneyField!)
-        if isinstance(value, list):
-            amount, currency = value
-            return f"{amount} {currency}"
-        # Assuming it's a money object
-        return f"{value.amount} {value.currency}"
+        pass
 
 
 class MoneyWidget(MultiWidget):
@@ -42,15 +32,4 @@ class MoneyWidget(MultiWidget):
         super().__init__(widgets, *args, **kwargs)
 
     def decompress(self, value):
-        if value is not None:
-            # Value provided by hidden input submissions somehow being evaluated in this widget
-            # TBD: Why does that happen when MoneyField.hidden_widget() is defined?
-            if isinstance(value, str):
-                if " " in value:
-                    amount, currency = value.split(" ")
-                    return [amount, currency]
-                raise ValueError(f"Invalid money value: {value}")
-            if isinstance(value, (list, tuple)):
-                return value
-            return [value.amount, value.currency]
-        return [None, self.default_currency]
+        pass

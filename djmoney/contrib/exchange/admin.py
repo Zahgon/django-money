@@ -10,7 +10,7 @@ class RateAdmin(admin.ModelAdmin):
     readonly_fields = ("backend",)
 
     def last_update(self, instance):
-        return instance.backend.last_update
+        pass
 
 
 admin.site.register(Rate, RateAdmin)

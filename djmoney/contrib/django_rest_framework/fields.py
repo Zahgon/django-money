@@ -51,42 +51,14 @@ class MoneyField(DecimalField):
         When ``field_currency`` is not in ``self.validated_data`` then ``obj`` is an instance of ``Decimal``, otherwise
         it is ``Money``.
         """
-        if isinstance(obj, MONEY_CLASSES):
-            obj = obj.amount
-        return super().to_representation(obj)
+        pass
 
     def to_internal_value(self, data):
-        if isinstance(data, MONEY_CLASSES + (_PrimitiveMoney,)):
-            amount = super().to_internal_value(data.amount)
-            try:
-                return Money(amount, data.currency)
-            except CurrencyDoesNotExist:
-                self.fail("invalid_currency", currency=data.currency)
-
-        return super().to_internal_value(data)
+        pass
 
     def get_value(self, data):
-        parent_meta = getattr(self.parent, "Meta", None)
-
-        default_currency = self.default_currency
-
-        if parent_meta and hasattr(parent_meta, "model"):
-            model = self.parent.Meta.model
-            try:
-                field = model._meta.get_field(self.source)
-                default_currency = field.default_currency
-            except FieldDoesNotExist as e:
-                if not hasattr(model, self.source):
-                    raise ValueError(
-                        f"{self.source} is neither a db field nor a property on the model {model.__name__}"
-                    ) from e
-
-        amount = super().get_value(data)
-        currency = data.get(get_currency_field_name(self.field_name), self.default_currency or default_currency)
-        if currency and amount is not None and not isinstance(amount, MONEY_CLASSES) and amount is not empty:
-            return _PrimitiveMoney(amount=amount, currency=currency)
-        return amount
+        pass
 
 
 def register_money_field():
-    ModelSerializer.serializer_field_mapping[ModelField] = MoneyField
+    pass

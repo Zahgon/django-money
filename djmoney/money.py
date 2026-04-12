@@ -87,15 +87,7 @@ class Money(DefaultMoney):
 
     @property
     def is_localized(self):
-        if self.use_l10n is None:
-            # This definitely raises a warning in Django 4 - we want to ignore RemovedInDjango50Warning
-            # However, we cannot ignore this specific warning class as it doesn't exist in older
-            # Django versions
-            with warnings.catch_warnings():
-                warnings.filterwarnings("ignore")
-                setting = getattr(settings, "USE_L10N", True)
-            return setting
-        return self.use_l10n
+        pass
 
     def __str__(self):
         format_options = {
@@ -149,19 +141,11 @@ class Money(DefaultMoney):
 
 
 def get_current_locale():
-    return translation.to_locale(
-        translation.get_language()
-        # get_language can return None starting from Django 1.8
-        or settings.LANGUAGE_CODE
-    )
+    pass
 
 
 def maybe_convert(value, currency):
     """
     Converts other Money instances to the local currency if `AUTO_CONVERT_MONEY` is set to True.
     """
-    if getattr(settings, "AUTO_CONVERT_MONEY", False) and value.currency != currency:
-        from .contrib.exchange.models import convert_money
-
-        return convert_money(value, currency)
-    return value
+    pass

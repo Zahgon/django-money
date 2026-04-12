@@ -10,8 +10,4 @@ Please do not catch ImportError exceptions other places than here :)
 
 
 def setup_managers(sender):
-    from .models.managers import money_manager
-
-    default_manager_name = sender._meta.default_manager_name or "objects"
-    for manager in filter(lambda m: m.name == default_manager_name, sender._meta.local_managers):
-        money_manager(manager)
+    pass

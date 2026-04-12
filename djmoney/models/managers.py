@@ -200,12 +200,7 @@ def understands_money(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        model = _get_model(args, func)
-        args = _expand_money_args(model, args)
-        exclusions = EXPAND_EXCLUSIONS.get(func.__name__, ())
-        args, kwargs = _expand_money_kwargs(model, args, kwargs, exclusions)
-        queryset = func(*args, **kwargs)
-        return add_money_comprehension_to_queryset(queryset)
+        pass
 
     return wrapper
 

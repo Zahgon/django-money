@@ -9,18 +9,7 @@ from djmoney.money import Money
 
 class BaseMoneyValidator(BaseValidator):
     def get_limit_value(self, cleaned):
-        limit_value = self.limit_value() if callable(self.limit_value) else self.limit_value
-        if isinstance(limit_value, Money):
-            if cleaned.currency.code != limit_value.currency.code:
-                return
-            return limit_value
-        elif isinstance(limit_value, (int, Decimal)):
-            return limit_value
-        try:
-            return Money(limit_value[cleaned.currency.code], cleaned.currency.code)
-        except KeyError:
-            # There are no validation for this currency
-            pass
+        pass
 
     def __call__(self, value):
         cleaned = self.clean(value)
@@ -45,7 +34,7 @@ class MinMoneyValidator(BaseMoneyValidator):
     code = "min_value"
 
     def compare(self, a, b):
-        return a < b
+        pass
 
 
 class MaxMoneyValidator(BaseMoneyValidator):
@@ -53,4 +42,4 @@ class MaxMoneyValidator(BaseMoneyValidator):
     code = "max_value"
 
     def compare(self, a, b):
-        return a > b
+        pass
